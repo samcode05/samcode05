@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Samuel Vergara — Desarrollador Web</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a2340;
+      --navy-light: #243050;
+      --gold: #c9a84c;
+      --gold-light: #e2c882;
+      --cream: #f8f6f1;
+      --white: #ffffff;
+      --text-muted: #6b7280;
+      --border: rgba(201,168,76,0.2);
+      --border-strong: rgba(201,168,76,0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ---- NAVBAR ---- */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(248,246,241,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 0 2rem;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 700;
+      color: var(--navy); letter-spacing: 1px;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted); text-decoration: none;
+      letter-spacing: 0.5px; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ---- LAYOUT ---- */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ---- HERO ---- */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem; align-items: center;
+      width: 100%;
+    }
+    .hero-tag {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .hero-tag::before {
+      content: ''; display: block;
+      width: 30px; height: 1px; background: var(--gold);
+    }
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 6vw, 64px);
+      font-weight: 700; line-height: 1.1;
+      color: var(--navy); margin-bottom: 1.25rem;
+    }
+    .hero-name span { color: var(--gold); }
+    .hero-desc {
+      font-size: 16px; color: var(--text-muted);
+      max-width: 420px; margin-bottom: 2rem;
+      font-weight: 300; line-height: 1.8;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 12px 28px;
+      background: var(--navy);
+      color: var(--gold);
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 1px; text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--navy);
+      transition: all 0.25s;
+      margin-right: 12px;
+    }
+    .hero-cta:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .hero-cta.outline {
+      background: transparent; color: var(--navy);
+      border-color: var(--border-strong);
+    }
+    .hero-cta.outline:hover { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+    .avatar-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .avatar {
+      width: 150px; height: 150px; border-radius: 50%;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 44px; font-weight: 700; color: var(--gold);
+      border: 3px solid var(--gold-light);
+    }
+    .hero-status {
+      font-size: 12px; padding: 6px 16px;
+      background: #eaf3de; color: #3B6D11;
+      border-radius: 20px; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .hero-status::before {
+      content: ''; width: 7px; height: 7px;
+      border-radius: 50%; background: #3B6D11;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px; color: var(--text-muted);
+      letter-spacing: 2px; text-transform: uppercase;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .scroll-arrow {
+      width: 1px; height: 40px; background: var(--border-strong);
+      animation: scrollDown 1.5s infinite;
+    }
+    @keyframes scrollDown {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ---- SECTION COMMON ---- */
+    section { padding: 5rem 0; }
+    .section-label {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 3rem;
+    }
+    .section-label span {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); white-space: nowrap;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-weight: 600;
+      color: var(--navy); margin-bottom: 0.5rem;
+    }
+    .section-sub {
+      font-size: 15px; color: var(--text-muted);
+      font-weight: 300; margin-bottom: 2.5rem;
+    }
+
+    /* ---- PROJECTS ---- */
+    #proyectos { background: var(--white); }
+    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .project-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      background: var(--cream);
+      transition: transform 0.2s, border-color 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--gold); transform: scaleX(0);
+      transform-origin: left; transition: transform 0.3s;
+    }
+    .project-card:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-type {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .project-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-weight: 600;
+      color: var(--navy); margin-bottom: 10px;
+    }
+    .project-desc {
+      font-size: 14px; color: var(--text-muted);
+      line-height: 1.7; margin-bottom: 1.25rem;
+    }
+    .project-footer { display: flex; justify-content: space-between; align-items: center; }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; padding: 3px 10px;
+      background: var(--white); color: var(--navy);
+      border: 1px solid var(--border); border-radius: 2px;
+      font-weight: 500;
+    }
+    .status {
+      font-size: 11px; font-weight: 500;
+      padding: 4px 12px; border-radius: 20px;
+      white-space: nowrap;
+    }
+    .status-live { background: #eaf3de; color: #3B6D11; }
+    .status-wip { background: #faeeda; color: #854F0B; }
+
+    /* ---- SKILLS ---- */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .skill-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.25rem;
+      transition: border-color 0.2s;
+    }
+    .skill-card:hover { border-color: var(--gold); }
+    .skill-icon { font-size: 22px; margin-bottom: 10px; }
+    .skill-name { font-size: 14px; font-weight: 500; color: var(--navy); margin-bottom: 4px; }
+    .skill-level { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+    .skill-bar { height: 2px; background: #e5e7eb; border-radius: 1px; overflow: hidden; }
+    .skill-fill { height: 100%; background: var(--gold); border-radius: 1px; }
+
+    /* ---- ABOUT ---- */
+    #sobre-mi { background: var(--navy); }
+    #sobre-mi .section-label span { color: var(--gold-light); }
+    #sobre-mi .section-label::after { background: rgba(255,255,255,0.15); }
+    #sobre-mi .section-title { color: var(--white); }
+    #sobre-mi .section-sub { color: rgba(255,255,255,0.5); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .about-text {
+      font-size: 15px; color: rgba(255,255,255,0.75);
+      line-height: 1.9; font-weight: 300;
+    }
+    .about-text p + p { margin-top: 1rem; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .stat {
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 1.5rem; text-align: center;
+      border-radius: 4px;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px; font-weight: 700;
+      color: var(--gold); display: block;
+    }
+    .stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 4px; letter-spacing: 0.5px; }
+
+    /* ---- CONTACT ---- */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.25rem 1.5rem;
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .contact-item:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .contact-icon {
+      width: 40px; height: 40px; border-radius: 4px;
+      background: var(--cream); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .contact-label { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; letter-spacing: 0.5px; }
+    .contact-value { font-size: 14px; font-weight: 500; color: var(--navy); }
+
+    /* ---- FOOTER ---- */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding: 2rem;
+      text-align: center;
+    }
+    .footer-text { font-size: 13px; color: rgba(255,255,255,0.4); }
+    .footer-text span { color: var(--gold); }
+
+    /* ---- FADE IN ---- */
+    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 640px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-desc { max-width: 100%; }
+      .hero-tag { justify-content: center; }
+      .avatar-wrap { display: none; }
+      .projects-grid, .skills-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SV</div>
+    <ul class="nav-links">
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#habilidades">Habilidades</a></li>
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-tag">Ingeniería en Sistemas · Cali, Colombia</div>
+          <h1 class="hero-name">Samuel<br><span>Vergara</span></h1>
+          <p class="hero-desc">Estudiante de Ingeniería en Sistemas y desarrollador web con experiencia en WordPress. Apasionado por construir sitios funcionales, limpios y enfocados en el usuario.</p>
+          <div>
+            <a href="#proyectos" class="hero-cta">Ver proyectos</a>
+            <a href="#contacto" class="hero-cta outline">Contactarme</a>
+          </div>
+        </div>
+        <div class="avatar-wrap">
+          <div class="avatar">SV</div>
+          <div class="hero-status">Disponible para proyectos</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="proyectos">
+    <div class="container">
+      <div class="section-label"><span>Proyectos</span></div>
+      <h2 class="section-title">Mi trabajo</h2>
+      <p class="section-sub">Sitios web desarrollados y en desarrollo con WordPress.</p>
+      <div class="projects-grid">
+
+        <div class="project-card fade-in">
+          <div class="project-type">WordPress · Sitio Web</div>
+          <div class="project-name">Mi primer sitio oficial</div>
+          <p class="project-desc">Primer proyecto web completado de forma profesional. Desarrollo completo desde la planificación hasta el despliegue, con diseño personalizado y optimización básica.</p>
+          <div class="project-footer">
+            <div class="project-tags">
+              <span class="tag">WordPress</span>
+              <span class="tag">CSS</span>
+            </div>
+            <span class="status status-live">Publicado</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.1s">
+          <div class="project-type">WordPress · Sitio Web</div>
+          <div class="project-name">Proyecto web #2</div>
+          <p class="project-desc">Segundo sitio en construcción aplicando mejores prácticas aprendidas en el primer proyecto, con estructura más avanzada y funcionalidades adicionales.</p>
+          <div class="project-footer">
+            <div class="project-tags">
+              <span class="tag">WordPress</span>
+              <span class="tag">Diseño</span>
+            </div>
+            <span class="status status-wip">En progreso</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.2s">
+          <div class="project-type">WordPress · Sitio Web</div>
+          <div class="project-name">Proyecto web #3</div>
+          <p class="project-desc">Tercer proyecto simultáneo, demostrando capacidad para gestionar múltiples clientes y entregas a la vez con calidad consistente.</p>
+          <div class="project-footer">
+            <div class="project-tags">
+              <span class="tag">WordPress</span>
+              <span class="tag">Gestión</span>
+            </div>
+            <span class="status status-wip">En progreso</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in" style="transition-delay:0.3s; border-style: dashed; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:200px;">
+          <div style="font-size:28px; margin-bottom:12px; opacity:0.3;">+</div>
+          <div class="project-name" style="font-size:16px; opacity:0.5;">Próximo proyecto</div>
+          <p class="project-desc" style="font-size:13px;">Aquí irá tu próximo trabajo</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="habilidades">
+    <div class="container">
+      <div class="section-label"><span>Habilidades</span></div>
+      <h2 class="section-title">Mis competencias</h2>
+      <p class="section-sub">Herramientas y tecnologías que manejo actualmente.</p>
+      <div class="skills-grid">
+        <div class="skill-card fade-in">
+          <div class="skill-icon">🌐</div>
+          <div class="skill-name">WordPress</div>
+          <div class="skill-level">Intermedio</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+        </div>
+        <div class="skill-card fade-in" style="transition-delay:0.05s">
+          <div class="skill-icon">🎨</div>
+          <div class="skill-name">HTML / CSS</div>
+          <div class="skill-level">Intermedio</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+        </div>
+        <div class="skill-card fade-in" style="transition-delay:0.1s">
+          <div class="skill-icon">🖥️</div>
+          <div class="skill-name">Diseño web</div>
+          <div class="skill-level">Básico–Intermedio</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+        </div>
+        <div class="skill-card fade-in" style="transition-delay:0.15s">
+          <div class="skill-icon">⚙️</div>
+          <div class="skill-name">Ing. Sistemas</div>
+          <div class="skill-level">En formación</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div>
+        </div>
+        <div class="skill-card fade-in" style="transition-delay:0.2s">
+          <div class="skill-icon">🔧</div>
+          <div class="skill-name">JavaScript</div>
+          <div class="skill-level">Aprendiendo</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:20%"></div></div>
+        </div>
+        <div class="skill-card fade-in" style="transition-delay:0.25s">
+          <div class="skill-icon">🐙</div>
+          <div class="skill-name">Git / GitHub</div>
+          <div class="skill-level">Básico</div>
+          <div class="skill-bar"><div class="skill-fill" style="width:30%"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="sobre-mi">
+    <div class="container">
+      <div class="section-label"><span>Sobre mí</span></div>
+      <div class="about-grid fade-in">
+        <div>
+          <h2 class="section-title">Quién soy</h2>
+          <div class="about-text">
+            <p>Soy Samuel Vergara, tengo 20 años y estudio Ingeniería en Sistemas en Cali, Colombia, con 2 años restantes para graduarme.</p>
+            <p>Me apasiona el desarrollo web. Ya tengo experiencia real creando sitios WordPress para clientes, y cada proyecto me enseña algo nuevo. Busco crecer rápido, aprender programación a fondo y eventualmente construir productos propios.</p>
+            <p>Estoy disponible para proyectos freelance mientras termino mi carrera.</p>
+          </div>
+        </div>
+        <div class="about-stats">
+          <div class="stat fade-in">
+            <span class="stat-num">1</span>
+            <div class="stat-label">Sitio publicado</div>
+          </div>
+          <div class="stat fade-in" style="transition-delay:0.1s">
+            <span class="stat-num">2</span>
+            <div class="stat-label">Proyectos activos</div>
+          </div>
+          <div class="stat fade-in" style="transition-delay:0.2s">
+            <span class="stat-num">20</span>
+            <div class="stat-label">Años de edad</div>
+          </div>
+          <div class="stat fade-in" style="transition-delay:0.3s">
+            <span class="stat-num">2</span>
+            <div class="stat-label">Años para graduarme</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contacto">
+    <div class="container">
+      <div class="section-label"><span>Contacto</span></div>
+      <h2 class="section-title">Hablemos</h2>
+      <p class="section-sub">¿Tienes un proyecto en mente? Estoy disponible.</p>
+      <div class="contact-grid fade-in">
+        <a href="mailto:samu@gmail.com" class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">samueldavidvergaramontoya30@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://linkedin.com/in/samuel-vergara" target="_blank" class="contact-item">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div class="contact-label">LinkedIn</div>
+            <div class="contact-value">Samuel Vergara</div>
+          </div>
+        </a>
+        <a href="https://github.com/samcode05" target="_blank" class="contact-item">
+          <div class="contact-icon">🐙</div>
+          <div>
+            <div class="contact-label">GitHub</div>
+            <div class="contact-value">github.com/samcode05</div>
+          </div>
+        </a>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-label">Ubicación</div>
+            <div class="contact-value">Cali, Colombia</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-text">Diseñado y desarrollado por <span>Samuel Vergara</span> · 2025</p>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
